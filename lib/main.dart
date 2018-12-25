@@ -27,10 +27,10 @@ class MyApp extends StatelessWidget {
 class RandomWordsState extends State<RandomWords> {
   // #enddocregion RWS-class-only
   // To Display a List of Words, using a container
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(
-    fontSize: 18.0
-  );
+  final List<WordPair> _suggestions = <WordPair>[];
+  // Storaged of the set of saved words
+  final Set<WordPair> _saved = new Set<WordPair>();
+  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   // A Function that returns a Widget ( From what we got so far Widget containing Widgets isn't far off)
   Widget _buildSuggestions() {
@@ -54,11 +54,18 @@ class RandomWordsState extends State<RandomWords> {
   }
 
   Widget _buildRow(WordPair pair) {
+    final bool alreadySaved = _saved.contains(pair);
     return ListTile(
+      // Has Title, trailing .. predefined positions for Widgets
       title: Text(
         pair.asPascalCase,
         style: _biggerFont,
       ),
+      trailing: new Icon(
+        // Check that saved pair was ci
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null
+      )
     );
   }
 
