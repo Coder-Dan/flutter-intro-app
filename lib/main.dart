@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:hello_world/item.dart';
 
-// One line function 
+// One line function
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -16,16 +16,14 @@ class MyApp extends StatelessWidget {
     print(context.owner);
 
     // final wordPair = WordPair.random();
-    return MaterialApp(
-      title: this.title,
-      home: RandomWords()
-    );
+    return MaterialApp(title: this.title, home: RandomWords());
   }
 }
 
 // #docregion RandomWordsState, RWS-class-only (STATEFUL)
 class RandomWordsState extends State<RandomWords> {
   // #enddocregion RWS-class-only
+
   // To Display a List of Words, using a container
   final List<WordPair> _suggestions = <WordPair>[];
   // Storaged of the set of saved words
@@ -36,21 +34,20 @@ class RandomWordsState extends State<RandomWords> {
   Widget _buildSuggestions() {
     // Interesting ... properties include padding styling
     return ListView.builder(
-      // Why would you give a const? Turns out you are allow to give constant values
-      padding: const EdgeInsets.all(16.0),
-      // On Demand Widget Creator, returns a widget
-      itemBuilder: (context, i) {
-        if (i.isOdd) return Divider(color: Colors.grey);
+        // Why would you give a const? Turns out you are allow to give constant values
+        padding: const EdgeInsets.all(16.0),
+        // On Demand Widget Creator, returns a widget
+        itemBuilder: (context, i) {
+          if (i.isOdd) return Divider(color: Colors.grey);
 
-        final index = i ~/2; /* ~/, forces integer return */
-        if (index >= _suggestions.length) {
-          // Nice stuff with the iterable
-          _suggestions.addAll(generateWordPairs().take(10));
-        }
+          final index = i ~/ 2; /* ~/, forces integer return */
+          if (index >= _suggestions.length) {
+            // Nice stuff with the iterable
+            _suggestions.addAll(generateWordPairs().take(10));
+          }
 
-        return _buildRow(_suggestions[index]);
-      }
-    );
+          return _buildRow(_suggestions[index]);
+        });
   }
 
   Widget _buildRow(WordPair pair) {
@@ -62,10 +59,20 @@ class RandomWordsState extends State<RandomWords> {
         style: _biggerFont,
       ),
       trailing: new Icon(
-        // Check that saved pair was ci
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null
-      )
+          // Check that saved pair was ci
+          alreadySaved ? Icons.favorite : Icons.favorite_border,
+          color: alreadySaved ? Colors.red : null),
+      // Event Function (Good practice would be to use 'onEvent' to distingish an Event)
+      onTap: () {
+        setState(() {
+          // print("Tap Triggered");
+          if (alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
     );
   }
 
@@ -76,7 +83,7 @@ class RandomWordsState extends State<RandomWords> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Startup Name Generator'),
-      ), 
+      ),
       body: _buildSuggestions(),
     );
   }
@@ -87,7 +94,8 @@ class RandomWordsState extends State<RandomWords> {
 // #docregion RandomWords (STATELESS)
 class RandomWords extends StatefulWidget {
   @override
-  RandomWordsState createState() => new RandomWordsState(); // just does what is in build
+  RandomWordsState createState() =>
+      new RandomWordsState(); // just does what is in build
 }
 
 class MyHomePage extends StatefulWidget {
