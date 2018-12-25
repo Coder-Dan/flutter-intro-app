@@ -16,7 +16,10 @@ class MyApp extends StatelessWidget {
     print(context.owner);
 
     // final wordPair = WordPair.random();
-    return MaterialApp(title: this.title, home: RandomWords());
+    return MaterialApp(
+      title: this.title,
+      theme: new ThemeData.dark(),
+      home: RandomWords());
   }
 }
 
@@ -85,6 +88,9 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+  /**
+   * 
+   */
   void _pushSaved() {
     // New route added to the navigator stack>
     Navigator.of(context)
