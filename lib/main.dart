@@ -24,10 +24,19 @@ class MyApp extends StatelessWidget {
 class RandomWordsState extends State<RandomWords> {
   // #enddocregion RWS-class-only
 
-  // To Display a List of Words, using a container
+  // Store a List of Words using a container
+  /**
+   * Property of RandomWordsState, holds the list of suggested startup names
+   */
   final List<WordPair> _suggestions = <WordPair>[];
   // Storaged of the set of saved words
+  /**
+   * Property of RandomWordsState, holds a list of saved startup names by the user
+   */
   final Set<WordPair> _saved = new Set<WordPair>();
+  /**
+   * Property of RandomWordsState, bigger font TextStyle
+   */
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   // A Function that returns a Widget ( From what we got so far Widget containing Widgets isn't far off)
@@ -76,14 +85,51 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+  void _pushSaved() {
+    // New route added to the navigator stack>
+    Navigator.of(context)
+        .push(new MaterialPageRoute(builder: (BuildContext context) {
+      // variable given by map function
+      final Iterable<ListTile> tiles = _saved.map((WordPair pair) {
+        return new ListTile(
+          title: Text(pair.asPascalCase, style: _biggerFont),
+        );
+      });
+
+      final List<Widget> divided = ListTile.divideTiles(
+              // Where to build
+              context: context,
+              tiles: tiles)
+          .toList();
+
+      // Finally, return the list displayed in a scaffold
+      return new Scaffold(
+        appBar: new AppBar(
+          title: const Text('Saved Suggestions'),
+        ),
+        body: new ListView(children: divided,)
+      );
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     // final wordPair = WordPair.random();
     // return Text(wordPair.asPascalCase);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-      ),
+      appBar: AppBar(title: Text('Startup Name Generator'),
+          // Adding actions, returns a list of Widgets
+          actions: <Widget>[
+            // TODO: What is an IconButton? --> Hamberger
+            new IconButton(
+              icon: const Icon(Icons.list),
+              onPressed: _pushSaved,
+            ),
+            new IconButton(
+              icon: const Icon(Icons.local_cafe),
+              onPressed: _pushSaved,
+            )
+          ]),
       body: _buildSuggestions(),
     );
   }
